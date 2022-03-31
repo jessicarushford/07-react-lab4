@@ -13,4 +13,5 @@ export default interface Gif {
   import_datetime: string;
   url: string;
   images: Images;
+  uid?: string;
 }

@@ -5,12 +5,15 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import Favorites from "./components/Favorites";
 import FavoritesContextProvider from "./context/FavoritesContextProvider";
+import AuthContextProvider from "./context/AuthContextProvider";
 
 ReactDOM.render(
   <React.StrictMode>
-    <FavoritesContextProvider>
-      <App />
-    </FavoritesContextProvider>
+    <AuthContextProvider>
+      <FavoritesContextProvider>
+        <App />
+      </FavoritesContextProvider>
+    </AuthContextProvider>
   </React.StrictMode>,
   document.getElementById("root")
 );

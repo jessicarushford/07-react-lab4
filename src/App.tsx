@@ -15,7 +15,6 @@ function App() {
   return (
     <div className="App">
       <Router>
-        <p>learn react</p>
         <Header />
         <Routes>
           <Route path="/" element={<Gallery />} />

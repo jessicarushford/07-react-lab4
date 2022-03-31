@@ -10,6 +10,7 @@ export const getTrendingGifs = (): Promise<GiphyResponse> => {
       params: { api_key: key },
     })
     .then((response) => {
+      console.log(response.data);
       return response.data;
     });
 };

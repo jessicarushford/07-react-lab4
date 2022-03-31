@@ -1,5 +1,11 @@
-import { ReactNode, useState } from "react";
+import { ReactNode, useContext, useEffect, useState } from "react";
 import Gif from "../models/Gif";
+import {
+  getFavorites,
+  addNewFavorite,
+  deleteFavorite,
+} from "../services/FavoriteService";
+import AuthContext from "./AuthContext";
 import FavoritesContext from "./FavoritesContext";
 
 interface Props {
@@ -7,17 +13,34 @@ interface Props {
 }
 
 const FavoritesContextProvider = ({ children }: Props) => {
+  const { user } = useContext(AuthContext);
   const [favorites, setFavorites] = useState<Gif[]>([]);
-  const addFavorite = (gif: Gif): void => {
-    setFavorites((prev) => [...prev, gif]);
-  };
-  const removeFavorite = (id: string): void => {
-    setFavorites((prev) => {
-      const index: number = prev.findIndex((item) => item.id === id);
-      return [...prev.slice(0, index), ...prev.slice(index + 1)];
+
+  const getAndSetFavorites = (user: any): void => {
+    getFavorites(user.uid).then((response) => {
+      setFavorites(response);
     });
   };
+
+  const addFavorite = (gif: Gif): void => {
+    addNewFavorite(gif).then(() => {
+      getAndSetFavorites(user);
+    });
+  };
+
+  const removeFavorite = (id: string): void => {
+    deleteFavorite(id).then(() => {
+      getAndSetFavorites(user);
+    });
+  };
+
   const isFav = (id: string): boolean => favorites.some((gif) => gif.id === id);
+
+  useEffect(() => {
+    if (user) {
+      getAndSetFavorites(user);
+    }
+  }, [user]);
 
   return (
     <FavoritesContext.Provider
